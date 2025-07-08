@@ -35,8 +35,13 @@ services:
       - VITE_PRODUCT_API=http://localhost:5101
       - VITE_CART_API=http://localhost:5102
       - VITE_CHECKOUT_API=http://localhost:5103
+
     volumes:
-      - ./frontend-react:/app
+      - ./frontend-react/src:/app/src
+      - ./frontend-react/public:/app/public
+      - ./frontend-react/index.html:/app/index.html
+    # add any other source code files or folders explicitly
+
     working_dir: /app
     command: npm run dev
     depends_on:
