@@ -1,16 +1,11 @@
 import React from "react";
+import "./BackgroundSection.css";
 
 const BackgroundSection = () => {
   return (
-    <div
-      className="bg-section"
-      style={{
-        backgroundImage: "url('/assets/bg.jpg')",
-        height: "200px", // Adjusted height
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    />
+    <div className="background-section">
+      <img src="/assets/bg.jpg" alt="Background" className="background-image" />
+    </div>
   );
 };
 

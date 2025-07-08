@@ -1,0 +1,15 @@
+.background-section {
+  width: 100%;
+  max-height: 500px; /* Adjust to control max height */
+  overflow: hidden; /* Hide anything beyond max height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0; /* fallback bg color */
+}
+
+.background-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* Keeps full image visible without cropping */
+}

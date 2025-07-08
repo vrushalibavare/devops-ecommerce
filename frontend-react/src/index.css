@@ -17,7 +17,7 @@ header {
 
 .bg-section {
   background-image: url("/bg.jpg");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   height: 500px;
 }
