@@ -4,9 +4,10 @@ html,
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+  background-color: #f8fafc;
 }
 
-header {
+.header {
   text-align: center;
   font-size: 2.5rem;
   font-weight: bold;
@@ -18,34 +19,98 @@ header {
   background-size: cover;
   background-position: center;
   height: 300px;
+  margin: 16px 0;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .products-section {
   padding: 24px;
   background-color: white;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 24px;
+  border-radius: 12px;
+  max-width: 1200px;
+  margin: 0 auto 48px auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .product-card {
   border: 1px solid #ddd;
   padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .product-card img {
   width: 100%;
-  height: auto;
-  border-radius: 4px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 .product-card h3 {
-  margin-top: 8px;
-  font-size: 1.25rem;
+  margin-top: 12px;
+  font-size: 1.3rem;
+  color: #222;
 }
 
 .product-card p {
-  color: #555;
+  color: #666;
+  margin: 8px 0 16px 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.add-cart-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-cart-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.cart-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.navbar {
+  background-color: #2563eb;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.nav-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.nav-links a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #93c5fd;
 }
