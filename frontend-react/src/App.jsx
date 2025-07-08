@@ -8,10 +8,14 @@ const App = () => {
   return (
     <Router>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
-      </Routes>
+      <header>Welcome to ShopMate</header>
+      <section className="background-section" />
+      <section className="products-section">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
+        </Routes>
+      </section>
     </Router>
   );
 };
