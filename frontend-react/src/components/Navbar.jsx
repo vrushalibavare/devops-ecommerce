@@ -1,16 +1,19 @@
+// frontend-react/src/components/Navbar.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => (
-  <nav className="bg-gray-800 text-white p-4 flex justify-between">
-    <Link to="/" className="font-bold text-lg">
+  <nav className="bg-blue-600 text-white p-4 flex justify-between items-center">
+    <Link to="/" className="text-xl font-bold">
       ShopMate
     </Link>
     <div>
-      <Link to="/" className="mr-4">
+      <Link to="/" className="mr-4 hover:underline">
         Home
       </Link>
-      <Link to="/cart">Cart</Link>
+      <Link to="/cart" className="hover:underline">
+        Cart
+      </Link>
     </div>
   </nav>
 );

@@ -1,47 +1,33 @@
-import React from "react";
-import { API } from "../config";
+// frontend-react/src/components/ProductList.jsx
+import React, { useEffect, useState } from "react";
+import cartIcon from "../assets/cart-icon.jpg";
 
-const ProductList = ({ products }) => {
-  const handleAddToCart = async (productId) => {
-    try {
-      const res = await fetch(`${API.cartService}/cart`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product_id: productId, quantity: 1 }),
-      });
-      if (res.ok) {
-        alert("Added to cart!");
-      } else {
-        alert("Failed to add to cart");
-      }
-    } catch (err) {
-      alert("Error: " + err.message);
-    }
-  };
+const ProductList = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch(import.meta.env.VITE_PRODUCT_API + "/products")
+      .then((res) => res.json())
+      .then(setProducts)
+      .catch(console.error);
+  }, []);
 
   return (
-    <div className="product-list grid grid-cols-3 gap-4 p-4">
-      {products.map((product) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {products.map(({ id, name, price, imageName }) => (
         <div
-          key={product.id}
-          className="border rounded p-4 flex flex-col items-center"
+          key={id}
+          className="bg-white rounded-md shadow-md p-4 flex flex-col items-center"
         >
           <img
-            src={product.image}
-            alt={product.name}
-            className="w-40 h-40 object-cover mb-2"
+            src={`/src/assets/${imageName}`}
+            alt={name}
+            className="w-40 h-40 object-contain mb-4"
           />
-          <h3 className="font-bold text-lg">{product.name}</h3>
-          <p className="text-gray-700">${product.price}</p>
-          <button
-            onClick={() => handleAddToCart(product.id)}
-            className="mt-3 bg-blue-600 text-white px-4 py-2 rounded flex items-center"
-          >
-            <img
-              src="/cart-icon.png"
-              alt="cart"
-              className="w-5 h-5 mr-2"
-            />
+          <h3 className="font-semibold text-lg mb-2">{name}</h3>
+          <p className="text-gray-700 mb-4">${price}</p>
+          <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            <img src={cartIcon} alt="cart" className="w-5 h-5" />
             Add to Cart
           </button>
         </div>
