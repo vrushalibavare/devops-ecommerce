@@ -1,18 +1,19 @@
 {
   "name": "frontend",
   "version": "1.0.0",
+  "private": true,                      // ✅ Recommended for apps not meant for npm publish
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "vite",                      // Starts Vite dev server (for Docker too)
+    "build": "vite build",              // Creates static production build (e.g., for S3)
+    "preview": "vite preview"           // Preview built app
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.0"
+    "react-router-dom": "^6.22.0"       // Routing support
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.1.0",
+    "@vitejs/plugin-react": "^4.1.0",   // Vite plugin for React/JSX
     "vite": "^5.2.0"
   }
 }

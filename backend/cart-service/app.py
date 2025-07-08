@@ -21,4 +21,4 @@ def remove_from_cart(item_id):
     return jsonify(cart), 204
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5002)
+    app.run(debug=True, host='0.0.0.0', port=5000)
