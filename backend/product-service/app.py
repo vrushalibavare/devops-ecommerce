@@ -4,9 +4,9 @@ app = Flask(__name__)
 
 # Sample data: Product list with image URLs
 products = [
-    {"id": 1, "name": "Sunglasses", "price": 49.99, "image_url": "/static/images/sunglasses.jpg"},
-    {"id": 2, "name": "Mobile Phone", "price": 299.99, "image_url": "/static/images/mobilephone.jpg"},
-    {"id": 3, "name": "Handbag", "price": 89.99, "image_url": "/static/images/handbag.jpg"}
+    {"id": 1, "name": "Sunglasses", "price": 120, "image_url": "/static/images/sunglasses.jpg"},
+    {"id": 2, "name": "Mobile Phone", "price": 800, "image_url": "/static/images/mobilephone.jpg"},
+    {"id": 3, "name": "Handbag", "price": 300, "image_url": "/static/images/handbag.jpg"}
 ]
 
 @app.route('/products', methods=['GET'])

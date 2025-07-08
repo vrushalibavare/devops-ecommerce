@@ -5,7 +5,8 @@ const ProductCard = ({ product }) => {
     <div className="product-card">
       <img src={`/assets/${product.image}`} alt={product.name} />
       <h3>{product.name}</h3>
-      <p>₹{product.price}</p>
+      <p>${product.price}</p>
+
       <button className="add-to-cart">
         <img
           src="/assets/cart-icon.jpg"
