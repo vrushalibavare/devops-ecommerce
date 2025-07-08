@@ -3,24 +3,15 @@ import Navbar from "./components/Navbar";
 import BackgroundSection from "./components/BackgroundSection";
 import ProductList from "./components/ProductList";
 
-const App = () => {
+function App() {
   return (
     <>
       <Navbar />
-      <header
-        style={{
-          textAlign: "center",
-          padding: "2rem 0",
-          fontSize: "2.5rem",
-          fontWeight: "bold",
-        }}
-      >
-        Welcome to Shopmate
-      </header>
+      <header>Welcome to ShopMate</header>
       <BackgroundSection />
       <ProductList />
     </>
   );
-};
+}
 
 export default App;

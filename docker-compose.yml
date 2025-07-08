@@ -4,30 +4,33 @@ services:
   product-service:
     build:
       context: ./backend/product-service
-    ports:
-      - "5101:5000" # host 5101 to container 5000
     container_name: product-service
+    ports:
+      - "5101:5000"
+    restart: unless-stopped
 
   cart-service:
     build:
       context: ./backend/cart-service
-    ports:
-      - "5102:5000" # host 5102 to container 5000
     container_name: cart-service
+    ports:
+      - "5102:5000"
+    restart: unless-stopped
 
   checkout-service:
     build:
       context: ./backend/checkout-service
-    ports:
-      - "5103:5000" # host 5103 to container 5000
     container_name: checkout-service
+    ports:
+      - "5103:5000"
+    restart: unless-stopped
 
   frontend:
     build:
       context: ./frontend-react
+    container_name: frontend
     ports:
       - "5173:5173"
-    container_name: frontend
     environment:
       - VITE_PRODUCT_API=http://localhost:5101
       - VITE_CART_API=http://localhost:5102
@@ -40,3 +43,4 @@ services:
       - product-service
       - cart-service
       - checkout-service
+    restart: unless-stopped
