@@ -1,24 +1,71 @@
-// frontend-react/src/App.jsx
 import React from "react";
 import Navbar from "./components/Navbar";
-import BackgroundSection from "./components/BackgroundSection";
-import ProductList from "./components/ProductList";
+import bgImage from "./assets/bg.jpg";
+import cartIcon from "./assets/cart-icon.jpg"; // put your cart icon here
 
-function App() {
+const products = [
+  {
+    id: 1,
+    name: "Sunglasses",
+    price: 99.99,
+    image: require("./assets/sunglasses.jpg"),
+  },
+  {
+    id: 2,
+    name: "Mobile Phone",
+    price: 499.99,
+    image: require("./assets/mobilephone.jpg"),
+  },
+  {
+    id: 3,
+    name: "Handbag",
+    price: 199.99,
+    image: require("./assets/handbag.jpg"),
+  },
+];
+
+export default function App() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
       <Navbar />
-      <header className="text-center p-6 bg-gray-100 text-3xl font-bold">
-        Welcome to ShopMate
-      </header>
-      <main className="flex-grow">
-        <BackgroundSection />
-        <section className="p-6">
-          <ProductList />
-        </section>
-      </main>
-    </div>
+      <header>Welcome to ShopMate</header>
+
+      <section
+        className="bg-section"
+        style={{ backgroundImage: `url(${bgImage})` }}
+      ></section>
+
+      <section className="products-section">
+        {products.map((product) => (
+          <div className="product-card" key={product.id}>
+            <img
+              src={product.image.default || product.image}
+              alt={product.name}
+            />
+            <h3>{product.name}</h3>
+            <p>${product.price.toFixed(2)}</p>
+            <button
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "8px 12px",
+                border: "none",
+                borderRadius: "4px",
+                backgroundColor: "#007bff",
+                color: "white",
+                cursor: "pointer",
+              }}
+            >
+              <img
+                src={cartIcon}
+                alt="cart"
+                style={{ width: 20, marginRight: 8 }}
+              />
+              Add to Cart
+            </button>
+          </div>
+        ))}
+      </section>
+    </>
   );
 }
-
-export default App;
