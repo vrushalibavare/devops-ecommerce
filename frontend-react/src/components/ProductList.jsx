@@ -1,18 +1,32 @@
-import React from "react";
-import ProductCard from "./ProductCard";
+import React, { useEffect, useState } from "react";
+import CONFIG from "../config";
 
-const sampleProducts = [
-  { name: "Sunglasses", price: 49.99, image: "/sunglasses.jpg" },
-  { name: "Mobile Phone", price: 699.99, image: "/mobilephone.jpg" },
-  { name: "Handbag", price: 89.99, image: "/handbag.jpg" },
-];
+const ProductList = () => {
+  const [products, setProducts] = useState([]);
 
-const ProductList = () => (
-  <div className="products-section">
-    {sampleProducts.map((p, index) => (
-      <ProductCard key={index} {...p} />
-    ))}
-  </div>
-);
+  useEffect(() => {
+    fetch(`${CONFIG.PRODUCT_API}/products`)
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.error("Failed to load products:", err));
+  }, []);
+
+  return (
+    <section className="products-section">
+      {products.length > 0 ? (
+        products.map((product) => (
+          <div key={product.id} className="product-card">
+            <img src={`/assets/${product.image}`} alt={product.name} />
+            <h3>{product.name}</h3>
+            <p>${product.price}</p>
+            <button>Add to Cart 🛒</button>
+          </div>
+        ))
+      ) : (
+        <p>Loading products...</p>
+      )}
+    </section>
+  );
+};
 
 export default ProductList;
