@@ -33,7 +33,7 @@ services:
       - "5173:5173"
     environment:
       - VITE_PRODUCT_API=http://localhost:5101
-      - VITE_CART_API=http://localhost:5102
+      - VITE_CART_API=http://cart-service:5102
       - VITE_CHECKOUT_API=http://localhost:5103
 
     volumes:
