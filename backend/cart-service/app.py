@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 cart_items = []  # in-memory cart
 
 @app.route('/cart', methods=['GET'])
@@ -16,4 +18,4 @@ def add_to_cart():
     return jsonify({'message': 'Item added to cart'}), 201
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=5000)

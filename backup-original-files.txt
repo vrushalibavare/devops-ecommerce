@@ -1,0 +1,79 @@
+ORIGINAL FILES BACKUP - Before Docker Fixes
+==========================================
+
+=== backend/cart-service/app.py ===
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+cart_items = []  # in-memory cart
+
+@app.route('/cart', methods=['GET'])
+def get_cart():
+    return jsonify(cart_items), 200
+
+@app.route('/cart', methods=['POST'])
+def add_to_cart():
+    data = request.json
+    if not data or 'product_id' not in data or 'quantity' not in data:
+        return jsonify({'error': 'Invalid input'}), 400
+    cart_items.append(data)
+    return jsonify({'message': 'Item added to cart'}), 201
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')
+
+=== backend/product-service/app.py ===
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+# Sample data: Product list with image URLs
+products = [
+    {"id": 1, "name": "Sunglasses", "price": 120, "image_url": "/static/images/sunglasses.jpg"},
+    {"id": 2, "name": "Mobile Phone", "price": 800, "image_url": "/static/images/mobilephone.jpg"},
+    {"id": 3, "name": "Handbag", "price": 300, "image_url": "/static/images/handbag.jpg"}
+]
+
+@app.route('/products', methods=['GET'])
+def get_products():
+    return jsonify(products)
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
+
+=== backend/checkout-service/app.py ===
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    data = request.json
+    if not data or 'cart' not in data:
+        return jsonify({'error': 'Invalid cart data'}), 400
+    return jsonify({'message': 'Order placed successfully', 'order': data}), 200
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')
+
+=== frontend-react/src/components/ProductList.jsx ===
+import React from "react";
+import ProductCard from "./ProductCard";
+
+const products = [
+  { name: "Sunglasses", price: 1200, image: "sunglasses.jpg" },
+  { name: "Mobile Phone", price: 25000, image: "mobilephone.jpg" },
+  { name: "Handbag", price: 3400, image: "handbag.jpg" },
+];
+
+const ProductList = () => {
+  return (
+    <section className="products-section">
+      {products.map((p, idx) => (
+        <ProductCard key={idx} product={p} />
+      ))}
+    </section>
+  );
+};
+
+export default ProductList;

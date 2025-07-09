@@ -1,12 +1,14 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Sample data: Product list with image URLs
 products = [
-    {"id": 1, "name": "Sunglasses", "price": 120, "image_url": "/static/images/sunglasses.jpg"},
-    {"id": 2, "name": "Mobile Phone", "price": 800, "image_url": "/static/images/mobilephone.jpg"},
-    {"id": 3, "name": "Handbag", "price": 300, "image_url": "/static/images/handbag.jpg"}
+    {"id": 1, "name": "Sunglasses", "price": 120, "image": "sunglasses.jpg"},
+    {"id": 2, "name": "Mobile Phone", "price": 800, "image": "mobilephone.jpg"},
+    {"id": 3, "name": "Handbag", "price": 300, "image": "handbag.jpg"}
 ]
 
 @app.route('/products', methods=['GET'])
