@@ -34,13 +34,14 @@ def checkout():
     
     # Generate order
     order_id = str(uuid.uuid4())[:8]
+    from datetime import datetime
     order = {
         'order_id': order_id,
         'items': data['cart'],
         'total': data.get('total', 0),
         'status': 'confirmed',
         'payment_status': 'paid',
-        'timestamp': data.get('timestamp'),
+        'timestamp': datetime.now().isoformat(),
         'estimated_delivery': '3-5 business days'
     }
     

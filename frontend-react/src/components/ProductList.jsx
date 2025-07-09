@@ -12,11 +12,11 @@ const ProductList = () => {
   }, []);
 
   return (
-    <section className="products-section">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {products.map((product, idx) => (
         <ProductCard key={product.id || idx} product={product} />
       ))}
-    </section>
+    </div>
   );
 };
 
