@@ -34,7 +34,8 @@ const Cart = () => {
 
       if (response.ok) {
         const result = await response.json();
-        alert(`Order placed successfully! Order details: ${JSON.stringify(result.message)}`);
+        const order = result.order;
+        alert(`🎉 Order Confirmed!\n\nOrder ID: ${order.order_id}\nTotal: $${order.total}\nStatus: ${order.status}\nEstimated Delivery: ${order.estimated_delivery}`);
         
         // Clear cart after successful checkout
         await fetch(`${import.meta.env.VITE_CART_API}/cart/clear`, {
@@ -44,7 +45,8 @@ const Cart = () => {
         // Refresh cart display
         fetchCart();
       } else {
-        throw new Error('Checkout failed');
+        const error = await response.json();
+        throw new Error(error.message || 'Checkout failed');
       }
     } catch (error) {
       console.error('Checkout error:', error);

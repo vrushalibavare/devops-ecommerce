@@ -1,34 +1,29 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => (
-  <nav
-    style={{
-      background: "#1f2937",
-      color: "white",
-      padding: "1rem",
-      display: "flex",
-      justifyContent: "space-between",
-    }}
-  >
-    <span style={{ fontWeight: "bold" }}>ShopMate</span>
-    <div>
-      <a href="/cart" style={{ marginRight: "1rem", color: "white" }}>
+  <nav className="bg-blue-600 text-white p-4 flex justify-between items-center">
+    <Link to="/" className="text-xl font-bold">
+      ShopMate
+    </Link>
+    <div className="flex space-x-4">
+      <Link to="/" className="hover:underline">
+        Home
+      </Link>
+      <Link to="/cart" className="hover:underline">
         🛒 Cart
+      </Link>
+      <Link to="/orders" className="hover:underline">
+        📋 Orders
+      </Link>
+      <a href="http://localhost:5101/products" className="hover:underline" target="_blank">
+        📦 Products API
       </a>
-      <a
-        href="http://localhost:5101/products"
-        style={{ marginRight: "1rem", color: "white" }}
-      >
-        📦 Products
-      </a>
-      <a
-        href="http://localhost:5102/cart"
-        style={{ marginRight: "1rem", color: "white" }}
-      >
+      <a href="http://localhost:5102/cart" className="hover:underline" target="_blank">
         🛒 Cart API
       </a>
-      <a href="http://localhost:5103/checkout" style={{ color: "white" }}>
-        💳 Checkout
+      <a href="http://localhost:5104/orders" className="hover:underline" target="_blank">
+        📋 Orders API
       </a>
     </div>
   </nav>

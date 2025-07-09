@@ -23,6 +23,16 @@ services:
     container_name: checkout-service
     ports:
       - "5103:5000"
+    depends_on:
+      - order-service
+    restart: unless-stopped
+
+  order-service:
+    build:
+      context: ./backend/order-service
+    container_name: order-service
+    ports:
+      - "5104:5000"
     restart: unless-stopped
 
   frontend:
@@ -35,6 +45,7 @@ services:
       - VITE_PRODUCT_API=http://localhost:5101
       - VITE_CART_API=http://localhost:5102
       - VITE_CHECKOUT_API=http://localhost:5103
+      - VITE_ORDER_API=http://localhost:5104
 
     volumes:
       - ./frontend-react/src:/app/src
@@ -48,4 +59,5 @@ services:
       - product-service
       - cart-service
       - checkout-service
+      - order-service
     restart: unless-stopped

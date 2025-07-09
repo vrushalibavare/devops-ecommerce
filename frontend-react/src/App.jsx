@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import BackgroundSection from "./components/BackgroundSection";
 import ProductList from "./components/ProductList";
 import Cart from "./components/Cart";
+import Orders from "./components/Orders";
 
 const HomePage = () => (
   <>
@@ -25,6 +26,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/orders" element={<Orders />} />
         </Routes>
       </main>
     </div>
