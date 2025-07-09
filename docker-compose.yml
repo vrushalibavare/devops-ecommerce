@@ -33,6 +33,23 @@ services:
     container_name: order-service
     ports:
       - "5104:5000"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://shopmate:password@postgres:5432/shopmate
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_DB: shopmate
+      POSTGRES_USER: shopmate
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
   frontend:
@@ -61,3 +78,6 @@ services:
       - checkout-service
       - order-service
     restart: unless-stopped
+
+volumes:
+  postgres_data:
