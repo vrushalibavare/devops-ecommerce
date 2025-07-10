@@ -169,7 +169,7 @@ const Products = () => {
     <div className="products">
       <h2>Product Catalog</h2>
       <p style={{textAlign: 'center', marginBottom: '2rem', color: '#666'}}>
-        Browse our product details. Visit Home page to purchase.
+        Browse our product details. <Link to="/" style={{color: '#2563eb', textDecoration: 'none'}}>Visit Home page to purchase</Link>.
       </p>
       <div className="product-grid">
         {products.map((product) => (
@@ -191,7 +191,9 @@ const Products = () => {
                 </div>
               )}
               <div style={{textAlign: 'center', padding: '0.5rem', background: '#f8f9fa', borderRadius: '0.5rem', fontSize: '0.8rem', color: '#666'}}>
-                Visit Home page to purchase this item
+                <Link to="/" style={{color: '#2563eb', textDecoration: 'none'}}>
+                  Visit Home page to purchase this item
+                </Link>
               </div>
             </div>
           </div>
@@ -212,9 +214,28 @@ const Orders = () => {
       .catch(console.error);
   }, []);
 
+  const clearOrders = async () => {
+    if (confirm('Clear all order history?')) {
+      try {
+        await fetch(`${import.meta.env.VITE_ORDER_API}/orders/clear`, { method: 'DELETE' });
+        setOrders([]);
+        alert('Orders cleared!');
+      } catch (error) {
+        alert('Failed to clear orders');
+      }
+    }
+  };
+
   return (
     <div className="products">
-      <h2>Your Orders</h2>
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}>
+        <h2>Your Orders</h2>
+        {orders.length > 0 && (
+          <button onClick={clearOrders} style={{background: '#dc2626', color: 'white', padding: '0.5rem 1rem', border: 'none', borderRadius: '0.25rem', cursor: 'pointer'}}>
+            Clear History
+          </button>
+        )}
+      </div>
       {orders.length === 0 ? (
         <p>No orders found</p>
       ) : (

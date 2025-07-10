@@ -34,6 +34,19 @@ def init_db():
     except Exception as e:
         print(f"Database initialization error: {e}")
 
+@app.route('/orders/clear', methods=['DELETE'])
+def clear_orders():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('DELETE FROM orders')
+        conn.commit()
+        cur.close()
+        conn.close()
+        return jsonify({'message': 'All orders cleared'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/orders', methods=['GET'])
 def get_orders():
     try:
