@@ -308,11 +308,7 @@ module "ecs_service_frontend" {
             "size" : 64,
             "mountOptions" : ["rw", "nosuid", "nodev", "noexec"]
           },
-          {
-            containerPath = "/var/cache/nginx/client_temp",
-            size          = 16,
-            mountOptions  = ["rw", "nosuid", "nodev", "noexec"]
-          },
+
           {
             "containerPath" : "/var/log/nginx",
             "size" : 64,

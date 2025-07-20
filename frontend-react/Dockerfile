@@ -23,6 +23,9 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Ensure the base directory for client_temp exists in the image
+RUN mkdir -p /var/cache/nginx/client_temp
+
 # Using tmpfs mounts for writable directories
 
 EXPOSE 80
