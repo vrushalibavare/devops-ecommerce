@@ -1,21 +1,28 @@
-FROM node:20
+FROM node:20 as build
 
 WORKDIR /app
-
-ENV NODE_ENV=development
 
 # Copy package files
 COPY package*.json ./
 
-# Delete existing node_modules and package-lock.json if any
-RUN rm -rf node_modules package-lock.json
-
-# Fresh install dependencies (including optional dependencies)
+# Install dependencies
 RUN npm install
 
 # Copy all frontend source code
 COPY . .
 
-EXPOSE 5173
+# Build the app
+RUN npm run build
 
-CMD ["npm", "run", "dev"]
+# Production stage
+FROM nginx:alpine
+
+# Copy built files to nginx
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
