@@ -1,0 +1,10 @@
+name: Immediate Test
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simple Test
+        run: echo "This workflow should run immediately after push"
