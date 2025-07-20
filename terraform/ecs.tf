@@ -301,26 +301,7 @@ module "ecs_service_frontend" {
         }
       }
       readonlyRootFilesystem = true
-      linuxParameters = {
-        tmpfs = [
-          {
-            "containerPath" : "/var/cache/nginx",
-            "size" : 64,
-            "mountOptions" : ["rw", "nosuid", "nodev", "noexec"]
-          },
-
-          {
-            "containerPath" : "/var/log/nginx",
-            "size" : 64,
-            "mountOptions" : ["rw", "nosuid", "nodev", "noexec"]
-          },
-          {
-            "containerPath" : "/var/run",
-            "size" : 64,
-            "mountOptions" : ["rw", "nosuid", "nodev", "noexec"]
-          }
-        ]
-      }
+      
     }
   }
 

@@ -14,22 +14,19 @@ COPY . .
 # Build the app
 RUN npm run build
 
-# Production stage
+# --- Production Stage ---
 FROM nginx:1.25.3
 
-# Copy built files to nginx
+# Copy built frontend assets
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copy nginx configuration
+# Copy custom nginx config (updated to use /tmp for temp files)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Ensure the base directory for client_temp exists in the image
-RUN mkdir -p /var/cache/nginx/client_temp
-
-# Using tmpfs mounts for writable directories
+# Create the /tmp/client_temp directory (Nginx will need this at runtime)
+RUN mkdir -p /tmp/client_temp
 
 EXPOSE 80
 
-#CMD ["nginx", "-g", "daemon off;"]
-CMD ["sh", "-c", "mkdir -p /var/cache/nginx/client_temp && nginx -g 'daemon off;'"]
-
+# Start Nginx normally (no need for mkdir in CMD anymore)
+CMD ["nginx", "-g", "daemon off;"]
