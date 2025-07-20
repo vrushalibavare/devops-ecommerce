@@ -5,5 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    host: true,
+    allowedHosts: ["frontend.shopmate.sctp-sandbox.com", "shopmate-dev-alb-1783686905.ap-southeast-1.elb.amazonaws.com"],
   },
 });
