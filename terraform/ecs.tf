@@ -93,14 +93,6 @@ module "ecs_service_product" {
     }
   }
 
-  load_balancer = [
-    {
-      target_group_arn = aws_lb_target_group.frontend.arn
-      container_name   = "product-service"
-      container_port   = 5000
-    }
-  ]
-
   subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
   assign_public_ip   = true
@@ -304,6 +296,14 @@ module "ecs_service_frontend" {
       }
     }
   }
+
+  load_balancer = [
+    {
+      target_group_arn = aws_lb_target_group.frontend.arn
+      container_name   = "frontend-service"
+      container_port   = 5173
+    }
+  ]
 
   subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
