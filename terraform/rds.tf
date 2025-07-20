@@ -23,12 +23,12 @@ module "db" {
   vpc_security_group_ids = [aws_security_group.db.id]
 
   # Keep monitoring features for dashboards
-  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
-  performance_insights_enabled    = true
-  performance_insights_retention_period = 7  # Free tier: 7 days retention
-  
+  enabled_cloudwatch_logs_exports       = ["postgresql", "upgrade"]
+  performance_insights_enabled          = true
+  performance_insights_retention_period = 7 # Free tier: 7 days retention
+
   # Simplify backup settings
-  backup_retention_period = 1  # Minimal backup (1 day)
+  backup_retention_period = 1 # Minimal backup (1 day)
   skip_final_snapshot     = true
   deletion_protection     = false
 

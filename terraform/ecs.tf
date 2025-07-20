@@ -3,7 +3,7 @@ module "ecs" {
   version = "~> 5.0"
 
   cluster_name = "${local.name_prefix}-cluster"
-  
+
   cluster_settings = {
     "name"  = "containerInsights"
     "value" = "enabled"
@@ -79,7 +79,7 @@ resource "aws_service_discovery_service" "services" {
 
 # Task Definitions and Services
 module "ecs_service_product" {
-  source = "terraform-aws-modules/ecs/aws//modules/service"
+  source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 5.0"
 
   name        = "${local.name_prefix}-product"
@@ -117,15 +117,15 @@ module "ecs_service_product" {
     registry_arn = aws_service_discovery_service.services["product"].arn
   }
 
-  subnet_ids = module.vpc.public_subnets
+  subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
-  assign_public_ip = true
+  assign_public_ip   = true
 
   tags = local.common_tags
 }
 
 module "ecs_service_cart" {
-  source = "terraform-aws-modules/ecs/aws//modules/service"
+  source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 5.0"
 
   name        = "${local.name_prefix}-cart"
@@ -163,15 +163,15 @@ module "ecs_service_cart" {
     registry_arn = aws_service_discovery_service.services["cart"].arn
   }
 
-  subnet_ids = module.vpc.public_subnets
+  subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
-  assign_public_ip = true
+  assign_public_ip   = true
 
   tags = local.common_tags
 }
 
 module "ecs_service_checkout" {
-  source = "terraform-aws-modules/ecs/aws//modules/service"
+  source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 5.0"
 
   name        = "${local.name_prefix}-checkout"
@@ -215,15 +215,15 @@ module "ecs_service_checkout" {
     registry_arn = aws_service_discovery_service.services["checkout"].arn
   }
 
-  subnet_ids = module.vpc.public_subnets
+  subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
-  assign_public_ip = true
+  assign_public_ip   = true
 
   tags = local.common_tags
 }
 
 module "ecs_service_order" {
-  source = "terraform-aws-modules/ecs/aws//modules/service"
+  source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 5.0"
 
   name        = "${local.name_prefix}-order"
@@ -267,15 +267,15 @@ module "ecs_service_order" {
     registry_arn = aws_service_discovery_service.services["order"].arn
   }
 
-  subnet_ids = module.vpc.public_subnets
+  subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
-  assign_public_ip = true
+  assign_public_ip   = true
 
   tags = local.common_tags
 }
 
 module "ecs_service_frontend" {
-  source = "terraform-aws-modules/ecs/aws//modules/service"
+  source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 5.0"
 
   name        = "${local.name_prefix}-frontend"
@@ -327,9 +327,9 @@ module "ecs_service_frontend" {
     }
   }
 
-  subnet_ids = module.vpc.public_subnets
+  subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
-  assign_public_ip = true
+  assign_public_ip   = true
 
   tags = local.common_tags
 }

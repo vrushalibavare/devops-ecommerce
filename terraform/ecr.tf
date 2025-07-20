@@ -46,10 +46,10 @@ resource "aws_ecr_repository_policy" "policy" {
         ]
       },
       {
-        Sid    = "DenyAllOthers"
-        Effect = "Deny"
+        Sid       = "DenyAllOthers"
+        Effect    = "Deny"
         Principal = "*"
-        Action = "ecr:*"
+        Action    = "ecr:*"
         Condition = {
           StringNotLike = {
             "aws:PrincipalArn" = data.aws_caller_identity.current.arn

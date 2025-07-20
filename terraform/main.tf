@@ -7,10 +7,10 @@ terraform {
     }
   }
   backend "s3" {
-    bucket         = "vrush-tfstate"
-    key            = "ecommerce.terraform.tfstate"
-    region         = "ap-southeast-1"
-    encrypt        = true
+    bucket  = "vrush-tfstate"
+    key     = "ecommerce.terraform.tfstate"
+    region  = "ap-southeast-1"
+    encrypt = true
   }
 }
 
