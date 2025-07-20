@@ -132,9 +132,7 @@ module "ecs_service_cart" {
     }
   }
 
-  service_registries = {
-    registry_arn = aws_service_discovery_service.services["cart"].arn
-  }
+  # Service discovery removed
 
   subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
@@ -184,9 +182,7 @@ module "ecs_service_checkout" {
     }
   }
 
-  service_registries = {
-    registry_arn = aws_service_discovery_service.services["checkout"].arn
-  }
+  # Service discovery removed
 
   subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
@@ -236,9 +232,7 @@ module "ecs_service_order" {
     }
   }
 
-  service_registries = {
-    registry_arn = aws_service_discovery_service.services["order"].arn
-  }
+  # Service discovery removed
 
   subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
