@@ -1,3 +1,5 @@
+# This file is part of the Terraform configuration for AWS ECS services.
+# It sets up the ECS cluster, task definitions, and services for the application components.
 module "ecs" {
   source  = "terraform-aws-modules/ecs/aws"
   version = "~> 5.0"
