@@ -300,7 +300,8 @@ module "ecs_service_frontend" {
           "awslogs-stream-prefix" = "ecs"
         }
       }
-      readonlyRootFilesystem = true
+      readonlyRootFilesystem = false
+      
 
     }
   }
