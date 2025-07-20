@@ -66,6 +66,10 @@ resource "aws_lb_listener" "http" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.frontend.arn
   }
+  
+  lifecycle {
+    ignore_changes = [default_action]
+  }
 }
 
 resource "aws_lb_target_group" "frontend" {
@@ -74,6 +78,10 @@ resource "aws_lb_target_group" "frontend" {
   protocol    = "HTTP"
   vpc_id      = module.vpc.vpc_id
   target_type = "ip"
+  
+  lifecycle {
+    create_before_destroy = true
+  }
 
   health_check {
     path                = "/"
