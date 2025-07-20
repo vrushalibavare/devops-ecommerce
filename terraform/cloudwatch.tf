@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = "${local.name_prefix}-dashboard"
-  
+
   dashboard_body = jsonencode({
     widgets = [
       {
