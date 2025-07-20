@@ -5,7 +5,7 @@ on:
     workflows: ["Deploy Infrastructure"]
     types:
       - completed
-    branches: [main, testing]
+    branches: [main, testing-deploy]
   push:
     branches: [main, testing-deploy]
     paths:
