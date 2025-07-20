@@ -7,11 +7,6 @@ on:
         description: 'Type "destroy" to confirm infrastructure destruction'
         required: true
         type: string
-  # Adding a push trigger to make the workflow visible, but with a path that won't actually trigger it
-  push:
-    branches: [main, testing-deploy]
-    paths:
-      - ".github/workflows/destroy-infra.yaml"
 
 env:
   AWS_REGION: ap-southeast-1

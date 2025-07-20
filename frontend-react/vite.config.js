@@ -11,6 +11,11 @@ export default defineConfig({
       strict: false
     }
   },
+  preview: {
+    port: 80,
+    host: true,
+    strictPort: true
+  },
   optimizeDeps: {
     disabled: true
   },
