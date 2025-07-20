@@ -19,7 +19,8 @@ module "db" {
   port     = 5432
 
   multi_az               = false
-  db_subnet_group_name   = module.vpc.database_subnet_group_name
+  create_db_subnet_group = true
+  subnet_ids             = module.vpc.private_subnets
   vpc_security_group_ids = [aws_security_group.db.id]
 
   # Keep monitoring features for dashboards

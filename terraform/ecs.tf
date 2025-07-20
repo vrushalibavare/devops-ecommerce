@@ -20,11 +20,7 @@ module "ecs" {
   tags = local.common_tags
 }
 
-resource "aws_service_discovery_private_dns_namespace" "main" {
-  name        = "${var.project_name}.local"
-  description = "Service discovery namespace for ${var.project_name}"
-  vpc         = module.vpc.vpc_id
-}
+# Using existing hosted zone instead of private DNS namespace
 
 resource "aws_iam_role" "ecs_execution" {
   name = "${local.name_prefix}-ecs-execution-role"
@@ -113,8 +109,10 @@ module "ecs_service_product" {
     }
   }
 
-  service_registries = {
-    registry_arn = aws_service_discovery_service.services["product"].arn
+  load_balancer = {
+    target_group_arn = aws_lb_target_group.frontend.arn
+    container_name   = "product-service"
+    container_port   = 5000
   }
 
   subnet_ids         = module.vpc.public_subnets
@@ -301,7 +299,7 @@ module "ecs_service_frontend" {
       environment = [
         {
           name  = "VITE_PRODUCT_API"
-          value = "http://product-service.${aws_service_discovery_private_dns_namespace.main.name}:5000"
+          value = "http://product.${var.project_name}.${data.aws_route53_zone.existing.name}"
         },
         {
           name  = "VITE_CART_API"
