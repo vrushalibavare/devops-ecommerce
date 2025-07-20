@@ -5,7 +5,7 @@ module "db" {
   identifier = "${local.name_prefix}-db"
 
   engine               = "postgres"
-  engine_version       = "13.7"
+  engine_version       = "13"
   family               = "postgres13"
   major_engine_version = "13"
   instance_class       = "db.t3.micro"
