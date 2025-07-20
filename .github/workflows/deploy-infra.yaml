@@ -2,9 +2,9 @@ name: Deploy Infrastructure
 
 on:
   push:
-    branches: [main, testing]
+    branches: [main, testing-deploy]
     paths:
-      - 'terraform/**'
+      - "terraform/**"
   workflow_dispatch:
 
 env:

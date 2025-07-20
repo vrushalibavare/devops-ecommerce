@@ -1,3 +1,4 @@
+# This file is part of the Terraform configuration for AWS CloudWatch monitoring.
 resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = "${local.name_prefix}-dashboard"
 

@@ -7,10 +7,10 @@ on:
       - completed
     branches: [main, testing]
   push:
-    branches: [main, testing]
+    branches: [main, testing-deploy]
     paths:
-      - 'backend/**'
-      - 'frontend-react/**'
+      - "backend/**"
+      - "frontend-react/**"
   workflow_dispatch:
 
 env:
