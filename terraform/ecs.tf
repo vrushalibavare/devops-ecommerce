@@ -48,7 +48,8 @@ resource "aws_iam_role_policy_attachment" "ecs_execution" {
 
 resource "aws_iam_role_policy_attachment" "ecs_ecr_access" {
   role       = aws_iam_role.ecs_execution.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonECRFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
+
 }
 
 # Service Discovery removed - using Route53 records instead
