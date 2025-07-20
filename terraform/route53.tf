@@ -5,11 +5,11 @@ data "aws_route53_zone" "existing" {
 # Create A records for each service
 resource "aws_route53_record" "services" {
   for_each = {
-    product  = module.ecs_service_product.service_name
-    cart     = module.ecs_service_cart.service_name
-    checkout = module.ecs_service_checkout.service_name
-    order    = module.ecs_service_order.service_name
-    frontend = module.ecs_service_frontend.service_name
+    product  = "${local.name_prefix}-product"
+    cart     = "${local.name_prefix}-cart"
+    checkout = "${local.name_prefix}-checkout"
+    order    = "${local.name_prefix}-order"
+    frontend = "${local.name_prefix}-frontend"
   }
 
   zone_id = data.aws_route53_zone.existing.zone_id

@@ -30,9 +30,9 @@ output "private_subnets" {
   value       = module.vpc.private_subnets
 }
 
-output "service_discovery_namespace" {
-  description = "Service discovery namespace"
-  value       = aws_service_discovery_private_dns_namespace.main.name
+output "route53_domain" {
+  description = "Route53 domain for services"
+  value       = "${var.project_name}.${data.aws_route53_zone.existing.name}"
 }
 
 output "cloudwatch_dashboard_url" {

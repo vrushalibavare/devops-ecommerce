@@ -46,32 +46,7 @@ resource "aws_iam_role_policy_attachment" "ecs_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-# Service Discovery Services
-resource "aws_service_discovery_service" "services" {
-  for_each = toset([
-    "product",
-    "cart",
-    "checkout",
-    "order"
-  ])
-
-  name = "${each.key}-service"
-
-  dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.main.id
-
-    dns_records {
-      ttl  = 10
-      type = "A"
-    }
-
-    routing_policy = "MULTIVALUE"
-  }
-
-  health_check_custom_config {
-    failure_threshold = 1
-  }
-}
+# Service Discovery removed - using Route53 records instead
 
 # Task Definitions and Services
 module "ecs_service_product" {
@@ -195,7 +170,7 @@ module "ecs_service_checkout" {
       environment = [
         {
           name  = "ORDER_SERVICE_URL"
-          value = "http://order-service.${aws_service_discovery_private_dns_namespace.main.name}:5000"
+          value = "http://order.${var.project_name}.${data.aws_route53_zone.existing.name}"
         }
       ]
       log_configuration = {
@@ -303,15 +278,15 @@ module "ecs_service_frontend" {
         },
         {
           name  = "VITE_CART_API"
-          value = "http://cart-service.${aws_service_discovery_private_dns_namespace.main.name}:5000"
+          value = "http://cart.${var.project_name}.${data.aws_route53_zone.existing.name}"
         },
         {
           name  = "VITE_CHECKOUT_API"
-          value = "http://checkout-service.${aws_service_discovery_private_dns_namespace.main.name}:5000"
+          value = "http://checkout.${var.project_name}.${data.aws_route53_zone.existing.name}"
         },
         {
           name  = "VITE_ORDER_API"
-          value = "http://order-service.${aws_service_discovery_private_dns_namespace.main.name}:5000"
+          value = "http://order.${var.project_name}.${data.aws_route53_zone.existing.name}"
         }
       ]
       log_configuration = {
