@@ -10,6 +10,9 @@ on:
     branches: [main, ecs/testing]
   # Manual trigger option
   workflow_dispatch:
+  # Also run on push to specific branches
+  push:
+    branches: [main, ecs/testing]
 
 env:
   AWS_REGION: ap-southeast-1
