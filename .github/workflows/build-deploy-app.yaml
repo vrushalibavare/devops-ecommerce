@@ -7,10 +7,8 @@ on:
     paths:
       - "backend/**"
       - "frontend-react/**"
-  workflow_run:
-    workflows: ["Deploy Infrastructure"]
-    types: [completed]
-    branches: [main, testing-deploy]
+  repository_dispatch:
+    types: [deploy-app]
 
 env:
   AWS_REGION: ap-southeast-1
@@ -19,7 +17,7 @@ jobs:
   build-and-deploy:
     name: "Build and Deploy App"
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    # No condition needed as all triggers should run this job
 
     steps:
       - name: Checkout

@@ -1,6 +1,6 @@
 # ECR Repository Configuration
 # This module creates ECR repositories for the application components.
-# It also sets up the necessary IAM policies and permissions for the ECR repositories.
+
 
 resource "aws_ecr_repository" "repositories" {
   for_each = toset([

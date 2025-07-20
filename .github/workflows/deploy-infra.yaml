@@ -80,3 +80,10 @@ jobs:
         run: |
           cd terraform
           terraform apply -auto-approve -var="db_password=${{ secrets.DB_PASSWORD }}"
+          
+      - name: Trigger App Deployment
+        if: success()
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          event-type: deploy-app
+          token: ${{ secrets.GITHUB_TOKEN }}
