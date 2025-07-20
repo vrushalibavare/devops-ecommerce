@@ -1,5 +1,5 @@
 data "aws_route53_zone" "existing" {
-  name = "sctp-sandbox.com."  # Note the trailing dot
+  name = "sctp-sandbox.com." # Note the trailing dot
 }
 
 # Create A records for each service
@@ -15,7 +15,7 @@ resource "aws_route53_record" "services" {
   zone_id = data.aws_route53_zone.existing.zone_id
   name    = "${each.key}.${var.project_name}.${data.aws_route53_zone.existing.name}"
   type    = "A"
-  
+
   alias {
     name                   = aws_lb.main.dns_name
     zone_id                = aws_lb.main.zone_id
