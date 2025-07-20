@@ -51,9 +51,9 @@ resource "aws_cloudwatch_dashboard" "main" {
         height = 6
         properties = {
           metrics = [
-            ["AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", module.db.db_instance_identifier],
-            ["AWS/RDS", "FreeStorageSpace", "DBInstanceIdentifier", module.db.db_instance_identifier],
-            ["AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", module.db.db_instance_identifier]
+            ["AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "${local.name_prefix}-db"],
+            ["AWS/RDS", "FreeStorageSpace", "DBInstanceIdentifier", "${local.name_prefix}-db"],
+            ["AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", "${local.name_prefix}-db"]
           ]
           view    = "timeSeries"
           stacked = false
