@@ -1,3 +1,4 @@
+# this file is part of the ShopMate project
 name: Build and Deploy Images
 
 on:
@@ -18,22 +19,22 @@ jobs:
     name: "Build and Deploy Images"
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        
+
       - name: Build and Push Images
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -41,23 +42,23 @@ jobs:
           # Build and push product service
           docker build -t $ECR_REGISTRY/shopmate-product:latest ./backend/product-service
           docker push $ECR_REGISTRY/shopmate-product:latest
-          
+
           # Build and push cart service
           docker build -t $ECR_REGISTRY/shopmate-cart:latest ./backend/cart-service
           docker push $ECR_REGISTRY/shopmate-cart:latest
-          
+
           # Build and push checkout service
           docker build -t $ECR_REGISTRY/shopmate-checkout:latest ./backend/checkout-service
           docker push $ECR_REGISTRY/shopmate-checkout:latest
-          
+
           # Build and push order service
           docker build -t $ECR_REGISTRY/shopmate-order:latest ./backend/order-service
           docker push $ECR_REGISTRY/shopmate-order:latest
-          
+
           # Build and push frontend
           docker build -t $ECR_REGISTRY/shopmate-frontend:latest ./frontend-react
           docker push $ECR_REGISTRY/shopmate-frontend:latest
-          
+
       - name: Force ECS Services Update
         run: |
           aws ecs update-service --cluster shopmate-dev-cluster --service shopmate-dev-product --force-new-deployment
