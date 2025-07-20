@@ -300,7 +300,14 @@ module "ecs_service_frontend" {
           "awslogs-stream-prefix" = "ecs"
         }
       }
-      readonlyRootFilesystem = false
+      readonlyRootFilesystem = true
+      linuxParameters = {
+        tmpfs = [
+          { containerPath = "/var/cache/nginx", size = 64 },
+          { containerPath = "/var/log/nginx", size = 64 },
+          { containerPath = "/var/run", size = 64 }
+        ]
+      }
     }
   }
 
