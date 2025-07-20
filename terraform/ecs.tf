@@ -301,7 +301,7 @@ module "ecs_service_frontend" {
         }
       }
       readonlyRootFilesystem = true
-      
+
     }
   }
 
