@@ -1,14 +1,8 @@
 name: Build and Deploy App
 
 on:
+  # Only manual trigger now that we have the combined workflow
   workflow_dispatch:
-  push:
-    branches: [main, testing-deploy]
-    paths:
-      - "backend/**"
-      - "frontend-react/**"
-  repository_dispatch:
-    types: [deploy-app]
 
 env:
   AWS_REGION: ap-southeast-1

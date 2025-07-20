@@ -1,5 +1,5 @@
 # ECR Repository Configuration
-# This module creates ECR repositories for the application components.
+
 
 
 resource "aws_ecr_repository" "repositories" {
