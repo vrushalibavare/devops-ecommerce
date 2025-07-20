@@ -20,16 +20,13 @@ FROM nginx:alpine
 # Copy built files to nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Create a simple nginx config
-RUN echo 'server { listen 80; server_name _; location / { root /usr/share/nginx/html; index index.html; try_files $uri $uri/ /index.html; } }' > /etc/nginx/conf.d/default.conf
+# Nginx config is created later
 
-# Create nginx cache directories with proper permissions
-RUN mkdir -p /var/cache/nginx/client_temp \
-    /var/cache/nginx/proxy_temp \
-    /var/cache/nginx/fastcgi_temp \
-    /var/cache/nginx/uwsgi_temp \
-    /var/cache/nginx/scgi_temp \
-    && chmod 777 -R /var/cache/nginx
+# Use a custom nginx configuration that doesn't require cache directories
+RUN echo 'server { listen 80; server_name _; location / { root /usr/share/nginx/html; index index.html; try_files $uri $uri/ /index.html; } client_body_temp_path /tmp/client_temp; proxy_temp_path /tmp/proxy_temp; fastcgi_temp_path /tmp/fastcgi_temp; uwsgi_temp_path /tmp/uwsgi_temp; scgi_temp_path /tmp/scgi_temp; } ' > /etc/nginx/conf.d/default.conf
+
+# Create temp directories in /tmp which is writable
+RUN mkdir -p /tmp/client_temp /tmp/proxy_temp /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp && chmod 777 -R /tmp
 
 EXPOSE 80
 

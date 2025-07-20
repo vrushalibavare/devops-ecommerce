@@ -254,9 +254,7 @@ module "ecs_service_frontend" {
   cpu    = 256
   memory = 512
 
-  volume = {
-    nginx-cache = {}
-  }
+
 
   container_definitions = {
     frontend-service = {
@@ -303,20 +301,6 @@ module "ecs_service_frontend" {
         }
       }
       readonlyRootFilesystem = false
-      mountPoints = [
-        {
-          sourceVolume  = "nginx-cache",
-          containerPath = "/var/cache/nginx",
-          readOnly      = false
-        }
-      ]
-      mountPoints = [
-        {
-          sourceVolume  = "nginx-cache",
-          containerPath = "/var/cache/nginx",
-          readOnly      = false
-        }
-      ]
     }
   }
 
