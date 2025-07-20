@@ -14,8 +14,7 @@ COPY . .
 # Build the app
 RUN npm run build
 
-# Install express for the server
-RUN npm install express --save
+# No need for express, using built-in http module
 
 # Copy the server file
 COPY server.js .
