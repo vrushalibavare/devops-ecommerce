@@ -253,6 +253,10 @@ module "ecs_service_frontend" {
 
   cpu    = 256
   memory = 512
+  
+  volume = {
+    nginx-cache = {}
+  }
 
   container_definitions = {
     frontend-service = {
@@ -263,8 +267,8 @@ module "ecs_service_frontend" {
       port_mappings = [
         {
           name          = "frontend-service"
-          containerPort = 5173
-          hostPort      = 5173
+          containerPort = 80
+          hostPort      = 80
           protocol      = "tcp"
         }
       ]
@@ -299,6 +303,20 @@ module "ecs_service_frontend" {
         }
       }
       readonlyRootFilesystem = false
+      mountPoints = [
+        {
+          sourceVolume = "nginx-cache",
+          containerPath = "/var/cache/nginx",
+          readOnly = false
+        }
+      ]
+      mountPoints = [
+        {
+          sourceVolume = "nginx-cache",
+          containerPath = "/var/cache/nginx",
+          readOnly = false
+        }
+      ]
     }
   }
 
@@ -306,7 +324,7 @@ module "ecs_service_frontend" {
     {
       target_group_arn = aws_lb_target_group.frontend.arn
       container_name   = "frontend-service"
-      container_port   = 5173
+      container_port   = 80
     }
   ]
 
