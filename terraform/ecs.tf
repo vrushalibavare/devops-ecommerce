@@ -266,7 +266,7 @@ module "ecs_service_frontend" {
         {
           name          = "frontend-service"
           containerPort = 8080
-          hostPort      = 80
+          hostPort      = 8080
           protocol      = "tcp"
         }
       ]
