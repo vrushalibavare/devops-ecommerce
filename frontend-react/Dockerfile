@@ -15,11 +15,14 @@ COPY . .
 RUN npm run build
 
 # --- Production Stage ---
-FROM bitnami/nginx:latest
+FROM nginx:1.25.3
 
 # Copy built frontend assets
-COPY --from=build /app/dist /app
+COPY --from=build /app/dist /usr/share/nginx/html
 
-EXPOSE 8080
+# Copy nginx config file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Bitnami nginx runs on port 8080 by default and is designed for read-only filesystems
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
