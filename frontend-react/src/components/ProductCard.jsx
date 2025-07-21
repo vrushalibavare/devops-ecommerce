@@ -5,7 +5,7 @@ const ProductCard = ({ product }) => {
 
   const handleAddToCart = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_CART_API}/cart`, {
+      const response = await fetch(`/api/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,6 +37,11 @@ const ProductCard = ({ product }) => {
           src={`/assets/${product.image}`} 
           alt={product.name}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            console.error(`Failed to load image: ${product.image}`);
+            e.target.onerror = null;
+            e.target.src = "/assets/placeholder.jpg";
+          }}
         />
       </div>
       
