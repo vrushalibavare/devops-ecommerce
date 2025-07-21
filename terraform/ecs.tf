@@ -308,7 +308,7 @@ module "ecs_service_frontend" {
 
   load_balancer = [
     {
-      target_group_arn = aws_lb_target_group.frontend.arn
+      target_group_arn = aws_lb_target_group.frontend_8080.arn
       container_name   = "frontend-service"
       container_port   = 8080
     }
