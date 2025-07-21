@@ -23,6 +23,9 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
 
+# Create necessary directories in shared memory
+RUN mkdir -p /dev/shm/client_temp /dev/shm/proxy_temp /dev/shm/fastcgi_temp /dev/shm/uwsgi_temp /dev/shm/scgi_temp
+
 EXPOSE 80
 
 # Start Nginx
