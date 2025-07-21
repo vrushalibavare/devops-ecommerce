@@ -35,6 +35,11 @@ output "route53_domain" {
   value       = "${var.project_name}.${data.aws_route53_zone.existing.name}"
 }
 
+output "alb_dns_name" {
+  description = "DNS name of the Application Load Balancer"
+  value       = aws_lb.main.dns_name
+}
+
 output "cloudwatch_dashboard_url" {
   description = "URL to the CloudWatch dashboard"
   value       = "https://${var.aws_region}.console.aws.amazon.com/cloudwatch/home?region=${var.aws_region}#dashboards:name=${aws_cloudwatch_dashboard.main.dashboard_name}"

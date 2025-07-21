@@ -22,7 +22,8 @@ resource "aws_ecr_repository" "repositories" {
   tags = local.common_tags
 }
 
-# ECR Repository Policy
+# ECR Repository Policy - Commented out due to issues
+/*
 resource "aws_ecr_repository_policy" "policy" {
   for_each   = aws_ecr_repository.repositories
   repository = each.value.name
@@ -30,12 +31,6 @@ resource "aws_ecr_repository_policy" "policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      {
-        Sid    = "DenyAllByDefault"
-        Effect = "Deny"
-        Principal = "*"
-        Action   = "ecr:*"
-      },
       {
         Sid    = "AllowSpecificUserPushAndPull"
         Effect = "Allow"
@@ -68,5 +63,6 @@ resource "aws_ecr_repository_policy" "policy" {
     ]
   })
 }
+*/
 
 data "aws_caller_identity" "current" {}

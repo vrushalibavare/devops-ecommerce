@@ -302,12 +302,29 @@ module "ecs_service_frontend" {
       }
       readonlyRootFilesystem = false
       linuxParameters = {
-        tmpfs = [
-          { containerPath = "/var/cache/nginx", size = 64 },
-          { containerPath = "/var/run", size = 64 },
-          { containerPath = "/dev/shm", size = 128 }
-        ]
-      }
+  tmpfs = [
+    {
+      containerPath = "/var/cache/nginx"
+      size          = 64
+    },
+    {
+      containerPath = "/var/run"
+      size          = 64
+    },
+    {
+      containerPath = "/dev/shm"
+      size          = 128
+    }
+  ]
+}
+      mountPoints = [
+        {
+          sourceVolume  = "tmpfs"
+          containerPath = "/tmp/vite-tmp"
+          readOnly      = false
+        }
+      ]
+
 
 
     }

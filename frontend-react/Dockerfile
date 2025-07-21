@@ -1,21 +1,37 @@
-FROM node:20
+# Build stage
+FROM --platform=linux/amd64 node:20-alpine AS build
 
 WORKDIR /app
 
-ENV NODE_ENV=development
-
-# Copy package files
 COPY package*.json ./
+RUN npm ci
 
-# Delete existing node_modules and package-lock.json if any
-RUN rm -rf node_modules package-lock.json
-
-# Fresh install dependencies (including optional dependencies)
-RUN npm install
-
-# Copy all frontend source code
 COPY . .
 
-EXPOSE 5173
+RUN npm run build
 
-CMD ["npm", "run", "dev"]
+# Production nginx stage
+FROM --platform=linux/amd64 nginx:alpine
+
+# Copy the entire built frontend (including assets)
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy custom nginx configs
+COPY nginx-main.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+# Copy startup script
+COPY docker-entrypoint.sh /usr/local/bin/
+
+# Make it executable
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Use this script as the container entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+
+
+
+#CMD ["nginx", "-g", "daemon off;"]
