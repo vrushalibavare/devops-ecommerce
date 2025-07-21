@@ -23,8 +23,8 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copy custom nginx config (updated to use /tmp for temp files)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Create the /tmp/client_temp directory (Nginx will need this at runtime)
-RUN mkdir -p /tmp/client_temp
+# Create directories in shared memory for nginx temp files
+RUN mkdir -p /dev/shm/client_temp /dev/shm/proxy_temp /dev/shm/fastcgi_temp /dev/shm/uwsgi_temp /dev/shm/scgi_temp
 
 EXPOSE 80
 
