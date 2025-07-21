@@ -93,6 +93,14 @@ module "ecs_service_product" {
     }
   }
 
+  load_balancer = [
+    {
+      target_group_arn = aws_lb_target_group.product.arn
+      container_name   = "product-service"
+      container_port   = 5000
+    }
+  ]
+
   subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
   assign_public_ip   = true
@@ -135,7 +143,13 @@ module "ecs_service_cart" {
     }
   }
 
-  # Service discovery removed
+  load_balancer = [
+    {
+      target_group_arn = aws_lb_target_group.cart.arn
+      container_name   = "cart-service"
+      container_port   = 5000
+    }
+  ]
 
   subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
@@ -185,7 +199,13 @@ module "ecs_service_checkout" {
     }
   }
 
-  # Service discovery removed
+  load_balancer = [
+    {
+      target_group_arn = aws_lb_target_group.checkout.arn
+      container_name   = "checkout-service"
+      container_port   = 5000
+    }
+  ]
 
   subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
@@ -235,7 +255,13 @@ module "ecs_service_order" {
     }
   }
 
-  # Service discovery removed
+  load_balancer = [
+    {
+      target_group_arn = aws_lb_target_group.order.arn
+      container_name   = "order-service"
+      container_port   = 5000
+    }
+  ]
 
   subnet_ids         = module.vpc.public_subnets
   security_group_ids = [aws_security_group.ecs.id]
