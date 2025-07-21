@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Build the app
-RUN npm run build
+RUN npm run build && ls -la dist && find dist -type f | grep -E '\.(jpg|jpeg|png|gif|svg|webp)$'
 
 # --- Production Stage ---
 FROM nginx:1.25.3
@@ -20,8 +20,8 @@ FROM nginx:1.25.3
 # Copy built frontend assets
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Simple nginx config with proper MIME types
-RUN echo 'server { listen 80; server_name _; access_log /dev/stdout; error_log /dev/stderr; location / { root /usr/share/nginx/html; index index.html; try_files $uri $uri/ /index.html; } location ~* \.(jpg|jpeg|png|gif|ico|svg|webp)$ { expires 30d; add_header Cache-Control "public, no-transform"; } }' > /etc/nginx/conf.d/default.conf
+# Copy nginx config file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
