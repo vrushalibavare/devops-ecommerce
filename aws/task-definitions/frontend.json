@@ -1,0 +1,48 @@
+{
+  "family": "ecommerce-frontend",
+  "networkMode": "awsvpc",
+  "executionRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID}:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "frontend",
+      "image": "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ecommerce-frontend:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "VITE_PRODUCT_API",
+          "value": "http://${ALB_DNS_NAME}/api/products"
+        },
+        {
+          "name": "VITE_CART_API",
+          "value": "http://${ALB_DNS_NAME}/api/cart"
+        },
+        {
+          "name": "VITE_CHECKOUT_API",
+          "value": "http://${ALB_DNS_NAME}/api/checkout"
+        },
+        {
+          "name": "VITE_ORDER_API",
+          "value": "http://${ALB_DNS_NAME}/api/orders"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/ecommerce-frontend",
+          "awslogs-region": "${AWS_REGION}",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512"
+}

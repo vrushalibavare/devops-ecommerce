@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Check</title>
+</head>
+<body>
+    <h1>Product API Response</h1>
+    <pre id="result"></pre>
+    
+    <script>
+        // Get the product API URL from the environment or use a default
+        const productApiUrl = localStorage.getItem('PRODUCT_API') || 'http://localhost:5000';
+        
+        fetch(productApiUrl + '/products')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('result').textContent = 'Error: ' + error.message;
+            });
+    </script>
+</body>
+</html>

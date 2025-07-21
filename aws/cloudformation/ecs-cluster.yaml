@@ -1,0 +1,249 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'ECS Cluster for eCommerce application'
+
+Parameters:
+  VpcStackName:
+    Type: String
+    Description: Name of the VPC stack
+    Default: ecommerce-vpc
+
+Resources:
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: ecommerce-cluster
+      CapacityProviders:
+        - FARGATE
+        - FARGATE_SPOT
+      DefaultCapacityProviderStrategy:
+        - CapacityProvider: FARGATE
+          Weight: 1
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for ALB
+      VpcId: 
+        Fn::ImportValue: !Sub "${VpcStackName}-VPC"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+
+  ECSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for ECS services
+      VpcId: 
+        Fn::ImportValue: !Sub "${VpcStackName}-VPC"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          SourceSecurityGroupId: !Ref ALBSecurityGroup
+
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: ecommerce-alb
+      Scheme: internet-facing
+      LoadBalancerAttributes:
+        - Key: idle_timeout.timeout_seconds
+          Value: '60'
+      Subnets:
+        - Fn::ImportValue: !Sub "${VpcStackName}-PublicSubnet1"
+        - Fn::ImportValue: !Sub "${VpcStackName}-PublicSubnet2"
+      SecurityGroups:
+        - !Ref ALBSecurityGroup
+
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref FrontendTargetGroup
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+  FrontendTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Port: 8080
+      Protocol: HTTP
+      TargetType: ip
+      VpcId: 
+        Fn::ImportValue: !Sub "${VpcStackName}-VPC"
+
+  ProductsTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /products
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Port: 5000
+      Protocol: HTTP
+      TargetType: ip
+      VpcId: 
+        Fn::ImportValue: !Sub "${VpcStackName}-VPC"
+
+  CartTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /cart
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Port: 5001
+      Protocol: HTTP
+      TargetType: ip
+      VpcId: 
+        Fn::ImportValue: !Sub "${VpcStackName}-VPC"
+
+  CheckoutTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /checkout
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Port: 5002
+      Protocol: HTTP
+      TargetType: ip
+      VpcId: 
+        Fn::ImportValue: !Sub "${VpcStackName}-VPC"
+
+  OrdersTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /orders
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Port: 5003
+      Protocol: HTTP
+      TargetType: ip
+      VpcId: 
+        Fn::ImportValue: !Sub "${VpcStackName}-VPC"
+
+  ProductsListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ProductsTargetGroup
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - /api/products*
+      ListenerArn: !Ref ALBListener
+      Priority: 10
+
+  CartListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref CartTargetGroup
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - /api/cart*
+      ListenerArn: !Ref ALBListener
+      Priority: 20
+
+  CheckoutListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref CheckoutTargetGroup
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - /api/checkout*
+      ListenerArn: !Ref ALBListener
+      Priority: 30
+
+  OrdersListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref OrdersTargetGroup
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - /api/orders*
+      ListenerArn: !Ref ALBListener
+      Priority: 40
+
+Outputs:
+  ECSCluster:
+    Description: ECS Cluster
+    Value: !Ref ECSCluster
+    Export:
+      Name: !Sub "${AWS::StackName}-Cluster"
+
+  ALB:
+    Description: Application Load Balancer
+    Value: !Ref ApplicationLoadBalancer
+    Export:
+      Name: !Sub "${AWS::StackName}-ALB"
+
+  ALBDNSName:
+    Description: ALB DNS Name
+    Value: !GetAtt ApplicationLoadBalancer.DNSName
+    Export:
+      Name: !Sub "${AWS::StackName}-ALBDNSName"
+
+  FrontendTargetGroup:
+    Description: Frontend Target Group
+    Value: !Ref FrontendTargetGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-FrontendTargetGroup"
+
+  ProductsTargetGroup:
+    Description: Products Target Group
+    Value: !Ref ProductsTargetGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-ProductsTargetGroup"
+
+  CartTargetGroup:
+    Description: Cart Target Group
+    Value: !Ref CartTargetGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-CartTargetGroup"
+
+  CheckoutTargetGroup:
+    Description: Checkout Target Group
+    Value: !Ref CheckoutTargetGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-CheckoutTargetGroup"
+
+  OrdersTargetGroup:
+    Description: Orders Target Group
+    Value: !Ref OrdersTargetGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-OrdersTargetGroup"
+
+  ECSSecurityGroup:
+    Description: ECS Security Group
+    Value: !Ref ECSSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-ECSSecurityGroup"

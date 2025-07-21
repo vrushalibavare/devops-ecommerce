@@ -1,38 +1,17 @@
 import React, { useState } from "react";
 
-const ProductCard = ({ product }) => {
+const SimpleProductCard = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = async () => {
     try {
-      const response = await fetch(`/api/cart`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          product_id: product.id,
-          name: product.name,
-          price: product.price,
-          quantity: quantity,
-          image: product.image
-        }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to add to cart');
-      }
-
-      alert(`${quantity} x ${product.name} added to cart`);
+      alert(`${quantity} x ${product.name} added to cart!`);
     } catch (err) {
-      console.error("Error adding to cart:", err.message);
+      console.error("Error adding to cart:", err);
       alert(`Failed to add to cart`);
     }
   };
 
-  // Log the image path for debugging
-  console.log('Product image path:', product.image);
-  
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border">
       <div className="aspect-square overflow-hidden rounded-t-lg">
@@ -40,6 +19,11 @@ const ProductCard = ({ product }) => {
           src={`/assets/${product.image}`} 
           alt={product.name}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            console.error(`Failed to load image: ${product.image}`);
+            e.target.src = "/assets/placeholder.jpg";
+            e.target.onerror = null;
+          }}
         />
       </div>
       
@@ -74,4 +58,4 @@ const ProductCard = ({ product }) => {
   );
 };
 
-export default ProductCard;
+export default SimpleProductCard;

@@ -1,83 +1,68 @@
-version: "3.8"
+version: '3'
 
 services:
-  product-service:
-    build:
-      context: ./backend/product-service
-    container_name: product-service
-    ports:
-      - "5101:5000"
-    restart: unless-stopped
-
-  cart-service:
-    build:
-      context: ./backend/cart-service
-    container_name: cart-service
-    ports:
-      - "5102:5000"
-    restart: unless-stopped
-
-  checkout-service:
-    build:
-      context: ./backend/checkout-service
-    container_name: checkout-service
-    ports:
-      - "5103:5000"
-    depends_on:
-      - order-service
-    restart: unless-stopped
-
-  order-service:
-    build:
-      context: ./backend/order-service
-    container_name: order-service
-    ports:
-      - "5104:5000"
-    depends_on:
-      - postgres
-    environment:
-      - DATABASE_URL=postgresql://shopmate:password@postgres:5432/shopmate
-    restart: unless-stopped
-
-  postgres:
-    image: postgres:13
-    container_name: postgres
-    environment:
-      POSTGRES_DB: shopmate
-      POSTGRES_USER: shopmate
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-
   frontend:
-    build:
-      context: ./frontend-react
-    container_name: frontend
+    build: ./frontend-react
     ports:
-      - "5173:5173"
+      - "8080:8080"
     environment:
-      - VITE_PRODUCT_API=http://localhost:5101
-      - VITE_CART_API=http://localhost:5102
-      - VITE_CHECKOUT_API=http://localhost:5103
-      - VITE_ORDER_API=http://localhost:5104
-
-    volumes:
-      - ./frontend-react/src:/app/src
-      - ./frontend-react/public:/app/public
-      - ./frontend-react/index.html:/app/index.html
-    # add any other source code files or folders explicitly
-
-    working_dir: /app
-    command: npm run dev
+      - VITE_PRODUCT_API=http://product-service:5000
+      - VITE_CART_API=http://cart-service:5001
+      - VITE_CHECKOUT_API=http://checkout-service:5002
+      - VITE_ORDER_API=http://order-service:5003
     depends_on:
       - product-service
       - cart-service
       - checkout-service
       - order-service
-    restart: unless-stopped
+
+  product-service:
+    build: ./product-service
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo:27017/products
+
+  cart-service:
+    build: ./cart-service
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - REDIS_URL=redis://redis:6379
+
+  checkout-service:
+    build: ./checkout-service
+    ports:
+      - "5002:5002"
+    environment:
+      - PORT=5002
+      - ORDER_API=http://order-service:5003
+      - CART_API=http://cart-service:5001
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "5003:5003"
+    environment:
+      - PORT=5003
+      - MONGODB_URI=mongodb://mongo:27017/orders
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
 
 volumes:
-  postgres_data:
+  mongo-data:
+  redis-data:

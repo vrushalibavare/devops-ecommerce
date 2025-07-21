@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
+import CONFIG from "../config";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_PRODUCT_API + "/products")
+    fetch(CONFIG.PRODUCT_API + "/products")
       .then((res) => res.json())
       .then(setProducts)
       .catch(console.error);

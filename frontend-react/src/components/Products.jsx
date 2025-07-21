@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { normalizeImagePath } from "../utils/imageUtils";
+import CONFIG from "../config";
+import { getProducts } from "../utils/mockApi";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -7,8 +10,13 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(import.meta.env.VITE_PRODUCT_API + "/products");
-        const data = await response.json();
+        let data;
+        if (CONFIG.USE_MOCK_DATA) {
+          data = await getProducts();
+        } else {
+          const response = await fetch(CONFIG.PRODUCT_API + "/products");
+          data = await response.json();
+        }
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -34,7 +42,7 @@ const Products = () => {
           {products.map((product) => (
             <div key={product.id} className="bg-white rounded-lg border p-4">
               <img 
-                src={`/assets/${product.image}`} 
+                src={`/assets/${normalizeImagePath(product.image)}`} 
                 alt={product.name}
                 className="w-full h-48 object-cover rounded mb-4"
               />

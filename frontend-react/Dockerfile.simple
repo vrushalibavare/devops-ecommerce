@@ -11,13 +11,12 @@ RUN npm install
 # Copy all frontend source code
 COPY . .
 
-# Build the app
-RUN npm run build
+# Ensure assets directory exists and copy images
+RUN mkdir -p public/assets && \
+    find public -name "*.jpg" -o -name "*.png" -exec cp {} public/assets/ \; 2>/dev/null || true
 
-# Copy public assets to dist/assets for proper bundling
-RUN mkdir -p dist/assets && \
-    cp -r public/assets/* dist/assets/ 2>/dev/null || true && \
-    find public -name "*.jpg" -o -name "*.png" -o -name "*.gif" -o -name "*.svg" -exec cp {} dist/assets/ \; 2>/dev/null || true
+# Build the app using the simplified version
+RUN cp src/main-simple.jsx src/main.jsx && npm run build
 
 # --- Production Stage ---
 FROM nginx:alpine
@@ -25,12 +24,8 @@ FROM nginx:alpine
 # Copy built frontend assets
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copy public assets directly to ensure images are available
+# Copy assets directory explicitly
 COPY --from=build /app/public/assets /usr/share/nginx/html/assets
-COPY --from=build /app/public/*.jpg /usr/share/nginx/html/assets/
-
-# Copy mock data for offline functionality
-COPY --from=build /app/public/mock-data.js /usr/share/nginx/html/
 
 # Create a simple nginx config
 RUN echo 'server { \

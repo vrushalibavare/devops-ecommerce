@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Image Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .image-container { display: flex; flex-wrap: wrap; gap: 20px; }
+        .image-item { border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
+        img { max-width: 200px; max-height: 200px; }
+    </style>
+</head>
+<body>
+    <h1>Image Test Page</h1>
+    <p>This page tests if images are loading correctly from the assets directory.</p>
+    
+    <div class="image-container">
+        <div class="image-item">
+            <img src="/assets/handbag.jpg" alt="Handbag">
+            <p>handbag.jpg</p>
+        </div>
+        <div class="image-item">
+            <img src="/assets/mobilephone.jpg" alt="Mobile Phone">
+            <p>mobilephone.jpg</p>
+        </div>
+        <div class="image-item">
+            <img src="/assets/sunglasses.jpg" alt="Sunglasses">
+            <p>sunglasses.jpg</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Debug Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .image-test { margin-bottom: 30px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        img { max-width: 200px; height: auto; display: block; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Image Loading Debug Page</h1>
+    <p>This page tests if images are loading correctly from different paths.</p>
+    
+    <div class="image-test">
+        <h2>Testing /assets/handbag.jpg</h2>
+        <img src="/assets/handbag.jpg" alt="Handbag" onerror="this.parentNode.innerHTML += '<p class=\'error\'>Failed to load image</p>'" onload="this.parentNode.innerHTML += '<p class=\'success\'>Image loaded successfully</p>'">
+    </div>
+    
+    <div class="image-test">
+        <h2>Testing /assets/mobilephone.jpg</h2>
+        <img src="/assets/mobilephone.jpg" alt="Mobile Phone" onerror="this.parentNode.innerHTML += '<p class=\'error\'>Failed to load image</p>'" onload="this.parentNode.innerHTML += '<p class=\'success\'>Image loaded successfully</p>'">
+    </div>
+    
+    <div class="image-test">
+        <h2>Testing /assets/sunglasses.jpg</h2>
+        <img src="/assets/sunglasses.jpg" alt="Sunglasses" onerror="this.parentNode.innerHTML += '<p class=\'error\'>Failed to load image</p>'" onload="this.parentNode.innerHTML += '<p class=\'success\'>Image loaded successfully</p>'">
+    </div>
+    
+    <div class="image-test">
+        <h2>Testing /handbag.jpg (root path)</h2>
+        <img src="/handbag.jpg" alt="Handbag" onerror="this.parentNode.innerHTML += '<p class=\'error\'>Failed to load image</p>'" onload="this.parentNode.innerHTML += '<p class=\'success\'>Image loaded successfully</p>'">
+    </div>
+
+    <script>
+        // Log browser information
+        document.write('<div class="image-test"><h2>Browser Information</h2>');
+        document.write('<p>User Agent: ' + navigator.userAgent + '</p>');
+        document.write('<p>Current URL: ' + window.location.href + '</p>');
+        document.write('</div>');
+        
+        // Check if running in Docker/production
+        fetch('/assets')
+            .then(response => {
+                document.write('<div class="image-test"><h2>Environment Check</h2>');
+                document.write('<p>Assets directory request status: ' + response.status + '</p>');
+                if (response.status === 403) {
+                    document.write('<p class="error">Permission denied accessing assets directory. This is likely a server configuration issue.</p>');
+                }
+                document.write('</div>');
+            })
+            .catch(error => {
+                document.write('<div class="image-test"><h2>Environment Check</h2>');
+                document.write('<p class="error">Error checking assets directory: ' + error.message + '</p>');
+                document.write('</div>');
+            });
+            
+        // Test direct image URLs
+        const testDirectImageUrls = () => {
+            const images = [
+                '/assets/handbag.jpg',
+                '/assets/mobilephone.jpg',
+                '/assets/sunglasses.jpg'
+            ];
+            
+            document.write('<div class="image-test"><h2>Direct Image URL Tests</h2>');
+            
+            images.forEach(url => {
+                fetch(url)
+                    .then(response => {
+                        const status = response.status;
+                        const statusClass = status === 200 ? 'success' : 'error';
+                        document.getElementById('direct-url-results').innerHTML += 
+                            `<p class="${statusClass}">URL: ${url} - Status: ${status}</p>`;
+                    })
+                    .catch(error => {
+                        document.getElementById('direct-url-results').innerHTML += 
+                            `<p class="error">URL: ${url} - Error: ${error.message}</p>`;
+                    });
+            });
+            
+            document.write('<div id="direct-url-results"></div></div>');
+        };
+        
+        setTimeout(testDirectImageUrls, 500);
+    </script>
+</body>
+</html>
