@@ -12,17 +12,14 @@ RUN npm install
 COPY . .
 
 # Build the app
-RUN npm run build && ls -la dist && find dist -type f | grep -E '\.(jpg|jpeg|png|gif|svg|webp)$'
+RUN npm run build
 
 # --- Production Stage ---
-FROM nginx:1.25.3
+FROM bitnami/nginx:latest
 
 # Copy built frontend assets
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /app
 
-# Copy nginx config file
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 8080
 
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Bitnami nginx runs on port 8080 by default and is designed for read-only filesystems

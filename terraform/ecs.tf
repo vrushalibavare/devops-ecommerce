@@ -265,7 +265,7 @@ module "ecs_service_frontend" {
       port_mappings = [
         {
           name          = "frontend-service"
-          containerPort = 80
+          containerPort = 8080
           hostPort      = 80
           protocol      = "tcp"
         }
@@ -310,7 +310,7 @@ module "ecs_service_frontend" {
     {
       target_group_arn = aws_lb_target_group.frontend.arn
       container_name   = "frontend-service"
-      container_port   = 80
+      container_port   = 8080
     }
   ]
 
